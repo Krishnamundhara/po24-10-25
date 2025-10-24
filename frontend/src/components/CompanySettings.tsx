@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CompanyProfile } from '../types/index';
 import { companyApi } from '../services/api';
-import { useTheme } from '../contexts/ThemeContext';
 import toast from 'react-hot-toast';
 
 interface CompanySettingsProps {
@@ -11,7 +10,6 @@ interface CompanySettingsProps {
 }
 
 const CompanySettings: React.FC<CompanySettingsProps> = ({ isOpen, onClose, onSave }) => {
-  const { theme, setTheme, resetTheme } = useTheme();
   const [profile, setProfile] = useState<CompanyProfile>({
     companyName: '',
     companyLogo: '',
@@ -24,7 +22,6 @@ const CompanySettings: React.FC<CompanySettingsProps> = ({ isOpen, onClose, onSa
     ifscCode: '',
     branchName: '',
   });
-  const [themeColors, setThemeColors] = useState(theme);
 
   const [loading, setLoading] = useState(false);
 
@@ -32,9 +29,8 @@ const CompanySettings: React.FC<CompanySettingsProps> = ({ isOpen, onClose, onSa
   useEffect(() => {
     if (isOpen) {
       loadProfile();
-      setThemeColors(theme);
     }
-  }, [isOpen, theme]);
+  }, [isOpen]);
 
   const loadProfile = async () => {
     try {
@@ -73,12 +69,6 @@ const CompanySettings: React.FC<CompanySettingsProps> = ({ isOpen, onClose, onSa
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setProfile({ ...profile, [name]: value });
-  };
-
-  const handleThemeColorChange = (colorType: 'primary' | 'secondary' | 'accent', value: string) => {
-    const updatedTheme = { ...themeColors, [colorType]: value };
-    setThemeColors(updatedTheme);
-    setTheme(updatedTheme);
   };
 
   const handleSave = async () => {
@@ -301,84 +291,6 @@ const CompanySettings: React.FC<CompanySettingsProps> = ({ isOpen, onClose, onSa
                   />
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Theme Settings */}
-          <div>
-            <h3 className="mb-4 font-semibold text-neutral-700">Theme Colors</h3>
-            <div className="space-y-4 rounded-lg bg-neutral-50 p-4">
-              <div>
-                <label className="block text-sm font-semibold text-neutral-700">Primary Color</label>
-                <div className="mt-2 flex items-center gap-3">
-                  <input
-                    type="color"
-                    value={themeColors.primary}
-                    onChange={(e) => handleThemeColorChange('primary', e.target.value)}
-                    className="h-12 w-20 cursor-pointer rounded border border-neutral-300"
-                  />
-                  <input
-                    type="text"
-                    value={themeColors.primary}
-                    onChange={(e) => handleThemeColorChange('primary', e.target.value)}
-                    className="flex-1 rounded-lg border border-neutral-200 px-3 py-2 text-sm text-neutral-900
-                      focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200"
-                    placeholder="#8B00FF"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-neutral-700">Secondary Color</label>
-                <div className="mt-2 flex items-center gap-3">
-                  <input
-                    type="color"
-                    value={themeColors.secondary}
-                    onChange={(e) => handleThemeColorChange('secondary', e.target.value)}
-                    className="h-12 w-20 cursor-pointer rounded border border-neutral-300"
-                  />
-                  <input
-                    type="text"
-                    value={themeColors.secondary}
-                    onChange={(e) => handleThemeColorChange('secondary', e.target.value)}
-                    className="flex-1 rounded-lg border border-neutral-200 px-3 py-2 text-sm text-neutral-900
-                      focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200"
-                    placeholder="#00CED1"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-neutral-700">Accent Color</label>
-                <div className="mt-2 flex items-center gap-3">
-                  <input
-                    type="color"
-                    value={themeColors.accent}
-                    onChange={(e) => handleThemeColorChange('accent', e.target.value)}
-                    className="h-12 w-20 cursor-pointer rounded border border-neutral-300"
-                  />
-                  <input
-                    type="text"
-                    value={themeColors.accent}
-                    onChange={(e) => handleThemeColorChange('accent', e.target.value)}
-                    className="flex-1 rounded-lg border border-neutral-200 px-3 py-2 text-sm text-neutral-900
-                      focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200"
-                    placeholder="#ff6a82"
-                  />
-                </div>
-              </div>
-
-              <button
-                onClick={() => {
-                  resetTheme();
-                  setThemeColors({ primary: '#8B00FF', secondary: '#00CED1', accent: '#ff6a82' });
-                  toast.success('Theme reset to default');
-                }}
-                className="w-full rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700
-                  hover:bg-neutral-100 transition"
-              >
-                Reset to Default Theme
-              </button>
             </div>
           </div>
 
