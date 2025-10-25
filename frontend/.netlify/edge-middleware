@@ -1,0 +1,6 @@
+// Netlify Edge Function for CORS handling
+export default async (request, context) => {
+  const response = await context.next();
+  response.headers.set("Access-Control-Allow-Origin", "*");
+  return response;
+};
